@@ -1,0 +1,134 @@
+#include<bits/stdc++.h>
+#define ll long long int
+using namespace std;
+
+ll n,k,maxi;
+ll arr[10000];
+vector<ll>vec;
+vector<ll>res;
+
+bool check(ll ans)
+{
+    ll day=k+1;
+    ll segment=n+1;
+    ll index=0;
+
+    while(segment>day)
+    {
+        ll sum=0;
+        ll count=0;
+        for(int i=index; i<=n; i++)
+        {
+            if(segment==day)
+            {
+                break;
+            }
+            sum+=arr[i];
+            count++;
+            if(sum==ans)
+            {
+                index=i+1;
+                if(count>1) segment--;
+                break;
+            }
+            else if(sum<ans)
+            {
+                if(count>1) segment--;
+                index=i+1;
+            }
+            else
+            {
+                sum=sum-arr[i];
+                index=i;
+                break;
+            }
+        }
+
+        vec.push_back(sum);
+        if(index>n)
+        {
+            break;
+        }
+    }
+
+    for(int i=index; i<=n; i++)
+    {
+        vec.push_back(arr[i]);
+    }
+
+    if(vec.size()==day)
+    {
+        maxi=ans;
+        res.clear();
+        for(int i=0; i<vec.size(); i++)
+        {
+            res.push_back(vec[i]);
+        }
+        vec.clear();
+        return true;
+    }
+
+    vec.clear();
+    return false;
+}
+
+void solve()
+{
+    ll lo=0,hi=0,mid;
+    for(int i=0; i<=n; i++)
+    {
+        lo=max(lo,arr[i]);
+        hi+=arr[i];
+    }
+
+    if(n+1<=k+1)
+    {
+        maxi=lo;
+        for(int i=0; i<=n; i++)
+        {
+            res.push_back(arr[i]);
+        }
+        return ;
+    }
+
+    while(lo<=hi)
+    {
+        mid=(lo+hi)/2;
+        if(check(mid)==true)
+        {
+            hi=mid-1;
+        }
+        else
+        {
+            lo=mid+1;
+        }
+    }
+}
+
+int main()
+{
+    ll tc,cas;
+    cas=0;
+    cin>>tc;
+    while(tc--)
+    {
+        cas++;
+        cin>>n>>k;
+        for(int i=0; i<=n; i++)
+        {
+            cin>>arr[i];
+        }
+
+        solve();
+
+        cout<<"Case "<<cas<<": "<<maxi<<endl;
+        for(int i=0; i<res.size(); i++)
+        {
+            cout<<res[i]<<endl;
+        }
+
+        vec.clear();
+        res.clear();
+    }
+    return 0;
+}
