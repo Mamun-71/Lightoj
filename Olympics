@@ -1,0 +1,76 @@
+#include<bits/stdc++.h>
+#define PI 3.141592653589793238
+using namespace std;
+
+double x,y,length,width;
+
+double check(double l)
+{
+    double w,r,theta,theta1,a,b,value,s;
+    w=(l*y)/x;
+
+    a=l*l;
+    b=w*w;
+    r=a+b;
+    r=sqrt(r);
+    r=r/2;
+    b=w/2;
+
+    theta1=2*acos(b/r);
+    theta=PI-theta1;
+
+    s=r*theta;
+
+    value=(l*2)+(s*2);
+
+    return value;
+}
+
+void solve()
+{
+    double lo,mid,hi,p,perimeter;
+
+    lo=0.0,hi=400.0,perimeter=400.0000000000;
+
+    for(int i=0; i<100; i++)
+    {
+        mid=(lo+hi)/2;
+        p=check(mid);
+        if(p>perimeter)
+        {
+            hi=mid;
+        }
+        else if(p==perimeter)
+        {
+            break;
+        }
+        else
+        {
+            lo=mid;
+        }
+    }
+
+    length=mid;
+    width=(mid*y)/x;
+
+}
+
+int main()
+{
+    int tc,cas;
+    char c[10];
+    cin>>tc;
+
+    cas=0;
+    while(tc--)
+    {
+        cas++;
+        cin>>x>>c[0]>>y;
+
+        solve();
+
+        printf("Case %d: %0.10lf %0.10lf\n",cas,length,width);
+    }
+    return 0;
+}
+
